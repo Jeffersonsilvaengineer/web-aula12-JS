@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de compras</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            max-width: 760px;
+            margin: 30px auto;
+            padding: 0 16px;
+            background: #f7fbff;
+            color: #1f2937;
+        }
+        h1 { color: #0f172a; }
+        input, button, select {
+            padding: 8px;
+            margin: 4px 0;
+            border-radius: 8px;
+            border: 1px solid #94a3b8;
+        }
+        button {
+            cursor: pointer;
+            background: #2563eb;
+            color: white;
+            border: none;
+        }
+        button:hover { background: #1d4ed8; }
+        .caixa {
+            background: white;
+            border-radius: 14px;
+            padding: 16px;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.12);
+            margin-top: 16px;
+        }
+        .erro { color: #b91c1c; font-weight: bold; }
+        .ok { color: #15803d; font-weight: bold; }
+</style>
+    <script>
+        window.onload = inicio;
+        let listaAComprar = [];
+
+        function inicio() {
+            let botao = document.getElementById('btnAdiciona');
+            botao.addEventListener('click', adicionar);
+
+            let campoItem = document.getElementById('item');
+            campoItem.addEventListener('keydown', function(evento) {
+                if (evento.key === 'Enter') {
+                    adicionar();
+                }
+            });
+
+            atualizar();
+        }
+
+        function adicionar() {
+            let campoItem = document.getElementById('item');
+            let texto = campoItem.value.trim();
+            let aviso = document.getElementById('aviso');
+
+            if (texto === '') {
+                aviso.textContent = 'Digite um item para adicionar.';
+                aviso.className = 'erro';
+                return;
+            }
+
+            listaAComprar.push(texto);
+            campoItem.value = '';
+            campoItem.focus();
+            aviso.textContent = 'Item adicionado com sucesso!';
+            aviso.className = 'ok';
+            atualizar();
+        }
+
+        function atualizar() {
+            let lista = document.getElementById('lista');
+            let quantidade = document.getElementById('quantidade');
+            lista.innerHTML = '';
+
+            for (let item of listaAComprar) {
+                lista.innerHTML += '<li>' + item + '</li>';
+            }
+
+            quantidade.textContent = 'Quantidade de itens: ' + listaAComprar.length;
+        }
+    </script>
+</head>
+<body>
+    <h1>Lista de compras</h1>
+    <div class="caixa">
+        <label for="item">Item:</label><br>
+        <input type="text" id="item" placeholder="Ex.: arroz">
+        <button id="btnAdiciona">Adicionar</button>
+        <p id="aviso"></p>
+    </div>
+    <div class="caixa">
+        <h2>Itens adicionados</h2>
+        <p id="quantidade">Quantidade de itens: 0</p>
+        <ul id="lista"></ul>
+    </div>
+</body>
+</html>

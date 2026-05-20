@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code of Abs Plus - Checklist</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            max-width: 760px;
+            margin: 30px auto;
+            padding: 0 16px;
+            background: #f7fbff;
+            color: #1f2937;
+        }
+        h1 { color: #0f172a; }
+        input, button, select {
+            padding: 8px;
+            margin: 4px 0;
+            border-radius: 8px;
+            border: 1px solid #94a3b8;
+        }
+        button {
+            cursor: pointer;
+            background: #2563eb;
+            color: white;
+            border: none;
+        }
+        button:hover { background: #1d4ed8; }
+        .caixa {
+            background: white;
+            border-radius: 14px;
+            padding: 16px;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.12);
+            margin-top: 16px;
+        }
+        .erro { color: #b91c1c; font-weight: bold; }
+        .ok { color: #15803d; font-weight: bold; }
+
+        .dia { display: none; }
+        .dia.ativo { display: block; }
+        li { margin: 8px 0; }
+        .concluido { text-decoration: line-through; color: #16a34a; }
+        .observacao { font-size: 0.95em; color: #475569; }
+    </style>
+    <script>
+        window.onload = inicio;
+
+        const planos = [
+            ['Hanging knee raises', 'Plank', 'Side plank', 'Alongamento leve'],
+            ['Leg raises', 'Flutter kicks', 'Crunches', 'Prancha final'],
+            ['Knee-ins', 'Russian twists', 'Reverse crunches', 'Alongamento'],
+            ['Sit-ups', 'Mountain climbers', 'Elbow plank', 'Respiração e descanso'],
+            ['Hanging leg raises', 'Bench crunches', 'Side-to-side plank', 'Alongamento'],
+            ['Scissors', 'Bicycle crunches', 'Plank shoulder taps', 'Descanso ativo'],
+            ['Twists', 'Body saw', 'Side plank direita', 'Side plank esquerda'],
+            ['Reverse crunches', 'Leg raises', 'Plank', 'Alongamento'],
+            ['Knee-ins', 'Flutter kicks', 'Crunch hold', 'Respiração'],
+            ['Sit-ups', 'Twisting crunches', 'Elbow plank', 'Alongamento']
+        ];
+
+        function inicio() {
+            document.getElementById('btnMostrar').addEventListener('click', mostrarDia);
+            document.getElementById('ultimoBA').addEventListener('change', mostrarDia);
+            criarOpcoes();
+            mostrarDia();
+        }
+
+        function criarOpcoes() {
+            let select = document.getElementById('ultimoBA');
+            for (let i = 0; i <= 9; i++) {
+                select.innerHTML += '<option value="' + i + '">' + i + '</option>';
+            }
+        }
+
+        function mostrarDia() {
+            let ultimo = Number(document.getElementById('ultimoBA').value);
+            let dia = ultimo === 0 ? 10 : ultimo;
+            let titulo = document.getElementById('tituloDia');
+            let lista = document.getElementById('listaExercicios');
+            let progresso = document.getElementById('progresso');
+
+            titulo.textContent = 'Dia escolhido: ' + dia;
+            lista.innerHTML = '';
+
+            let exercicios = planos[dia - 1];
+            for (let i = 0; i < exercicios.length; i++) {
+                let id = 'ex' + i;
+                lista.innerHTML += '<li><input type="checkbox" id="' + id + '" onchange="atualizarProgresso()"> ' +
+                    '<label for="' + id + '">' + exercicios[i] + '</label></li>';
+            }
+
+            progresso.textContent = 'Exercícios marcados: 0 de ' + exercicios.length;
+        }
+
+        function atualizarProgresso() {
+            let marcados = document.querySelectorAll('#listaExercicios input:checked').length;
+            let total = document.querySelectorAll('#listaExercicios input').length;
+            let progresso = document.getElementById('progresso');
+            progresso.textContent = 'Exercícios marcados: ' + marcados + ' de ' + total;
+
+            let itens = document.querySelectorAll('#listaExercicios li');
+            for (let item of itens) {
+                let checkbox = item.querySelector('input');
+                if (checkbox.checked) {
+                    item.className = 'concluido';
+                } else {
+                    item.className = '';
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Code of Abs Plus - Checklist</h1>
+    <div class="caixa">
+        <p class="observacao">Escolha o último número do BA. Conforme a aula, esse número define o dia da semana/atividade. Se o último número for 0, foi usado o dia 10 para manter a lógica da lista.</p>
+        <label for="ultimoBA">Último número do BA:</label><br>
+        <select id="ultimoBA"></select>
+        <button id="btnMostrar">Mostrar exercícios</button>
+    </div>
+
+    <div class="caixa">
+        <h2 id="tituloDia">Dia escolhido:</h2>
+        <p id="progresso">Exercícios marcados: 0</p>
+        <ul id="listaExercicios"></ul>
+    </div>
+
+    <div class="caixa">
+        <p class="observacao">Fonte do plano: DAREBEE - Code of Abs Plus. A página foi montada para treinar listas, arrays e checkboxes em JavaScript.</p>
+    </div>
+</body>
+</html>
